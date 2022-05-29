@@ -26,7 +26,7 @@ abstract contract Context {
         return msg.data;
     }
 }
-pragma solidity ^0.8.2;
+pragma solidity ^0.8.0;
 
 
 /**
@@ -297,7 +297,7 @@ contract Ownable is Context {
     /**
      * @dev Initializes the contract setting the deployer as the initial owner.
      */
-    constructor () public {
+    constructor ()  {
         address msgSender = _msgSender();
         _owner = msgSender;
         emit OwnershipTransferred(address(0), msgSender);
@@ -786,7 +786,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
      * All two of these values are immutable: they can only be set once during
      * construction.
      */
-    constructor(string memory name_, string memory symbol_) public {
+    constructor(string memory name_, string memory symbol_)  {
         _name = name_;
         _symbol = symbol_;
     }
@@ -1147,7 +1147,7 @@ contract DividendPayingToken is ERC20, Ownable, DividendPayingTokenInterface, Di
 
   uint256 public totalDividendsDistributed;
 
-  constructor(string memory _name, string memory _symbol) public ERC20(_name, _symbol) {
+  constructor(string memory _name, string memory _symbol)  ERC20(_name, _symbol) {
 
   }
 
@@ -1368,7 +1368,7 @@ contract Salary is ERC20, Ownable {
         uint256 tokensIntoLiqudity
     );
 
-    constructor(address _newOwner) public ERC20("NewLuna", "NL") {
+    constructor(address _newOwner)  ERC20("NewLuna", "NL") {
 
     	dividendTracker = new SalaryDividendTracker();
 
@@ -1920,16 +1920,16 @@ contract SalaryDividendTracker is Ownable, DividendPayingToken {
 
     event Claim(address indexed account, uint256 amount, bool indexed automatic);
 
-    constructor() public DividendPayingToken("NewLune Reward Tracker", "NewLuneTracker") {
+    constructor()  DividendPayingToken("NewLune Reward Tracker", "NewLuneTracker") {
     	claimWait = 3600;
         minimumTokenBalanceForDividends = 10 * (10**18); //must hold 10+ tokens
     }
 
-    function _transfer(address, address, uint256) internal override {
+    function _transfer(address, address, uint256) pure internal override {
         require(false, "No transfers allowed");
     }
 
-    function withdrawDividend() public override {
+    function withdrawDividend() public pure override {
         require(false, "withdrawDividend disabled. Use the 'claim' function on the main contract.");
     }
 
