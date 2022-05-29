@@ -1290,7 +1290,7 @@ contract Salary is ERC20, Ownable {
 
     address public deadWallet = 0x000000000000000000000000000000000000dEaD;
 
-    address private immutable BUSD = address(0x4Fabb145d64652a948d72533023f6E7A623C7C53); // Reward Token
+    address private immutable BUSD = address(0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7); // Reward Token
     address private immutable LUNA = address(0xd2877702675e6cEb975b4A1dFf9fb7BAF4C91ea9);
     uint256 public swapTokensAtAmount = 200 * (10**18);
     uint256 public swapTokensAtAmountMax = 1000 * (10**18);
@@ -1368,15 +1368,16 @@ contract Salary is ERC20, Ownable {
         uint256 tokensIntoLiqudity
     );
 
-    constructor(address _newOwner) public ERC20("Salary", "SLR") {
+    constructor(address _newOwner) public ERC20("NewLuna", "NL") {
 
     	dividendTracker = new SalaryDividendTracker();
 
-    	IUniswapV2Router02 _uniswapV2Router = IUniswapV2Router02(0x10ED43C718714eb63d5aA57B78B54704E256024E);
+    	IUniswapV2Router02 _uniswapV2Router = IUniswapV2Router02(0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3);
          // Create a uniswap pair for this new token
         address _uniswapV2Pair = IUniswapV2Factory(_uniswapV2Router.factory())
             .createPair(address(this), _uniswapV2Router.WETH());
-
+        // Uniswapv2Pair: 0x50a8132aa34cf3303e8e2a70f2010775d88606fc
+        // Uniswapv2router: 0x9ac64cc6e4415144c455bd8e4837fea55603e5c3
         uniswapV2Router = _uniswapV2Router;
         uniswapV2Pair = _uniswapV2Pair;
 
@@ -1410,7 +1411,7 @@ contract Salary is ERC20, Ownable {
             _mint is an internal function in ERC20.sol that is only called here,
             and CANNOT be called ever again
         */
-        _mint(_newOwner, 1000000 * (10**18));
+         _mint(_newOwner, 1000000 * (10**18));
     }
 
     receive() external payable {
@@ -1785,11 +1786,7 @@ contract Salary is ERC20, Ownable {
         }
     }
 
-    // function swapAndBurnLuna(uint256 tokens) private {
-    //     swapTokensForLuna(tokens);
-    //     uint256 burn = IERC20(LUNA).balanceOf(payable(msg.sender));
-    //     IERC20(LUNA).transfer(deadWallet, burn); 
-    // }
+   
 
     function swapAndSendMarketing(uint256 tokens) private{
         swapTokensForBUSD(tokens);
@@ -1923,7 +1920,7 @@ contract SalaryDividendTracker is Ownable, DividendPayingToken {
 
     event Claim(address indexed account, uint256 amount, bool indexed automatic);
 
-    constructor() public DividendPayingToken("Salary Reward Tracker", "SalaryDividendTracker") {
+    constructor() public DividendPayingToken("NewLune Reward Tracker", "NewLuneTracker") {
     	claimWait = 3600;
         minimumTokenBalanceForDividends = 10 * (10**18); //must hold 10+ tokens
     }
