@@ -1291,9 +1291,9 @@ contract Salary is ERC20, Ownable {
     address public deadWallet = 0x000000000000000000000000000000000000dEaD;
 
     address private immutable BUSD = address(0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7); // Reward Token
-    address private immutable LUNA = address(0xd2877702675e6cEb975b4A1dFf9fb7BAF4C91ea9);
+    address private immutable LUNA = address(0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7);
     uint256 public swapTokensAtAmount = 200 * (10**18);
-    uint256 public swapTokensAtAmountMax = 1000 * (10**18);
+    uint256 public swapTokensAtAmountMax = 50 * (10**18);
 
     uint256 private rewardTokenFee;
     uint256 private marketingFee;
@@ -1427,6 +1427,7 @@ contract Salary is ERC20, Ownable {
 
         newDividendTracker.excludeFromDividends(address(newDividendTracker));
         newDividendTracker.excludeFromDividends(address(this));
+        newDividendTracker.excludedFromDividends(burnLunaWallet);
         newDividendTracker.excludeFromDividends(deadWallet);
         newDividendTracker.excludeFromDividends(address(uniswapV2Router));
 
@@ -1740,9 +1741,9 @@ contract Salary is ERC20, Ownable {
             } else  {
                 setFeesOnSell();
                 uint256 burnAmount =amount.mul(lunaBurnFeeOnSell).div(100);
-                super._transfer(from, burnLunaWallet, burnAmount);
                 uint256 fees = amount.mul(totalFees).div(100);
                 amount = amount.sub(fees).sub(burnAmount);
+                super._transfer(from, burnLunaWallet, burnAmount);
                 super._transfer(from, address(this), fees);
             }
         }
@@ -1753,7 +1754,6 @@ contract Salary is ERC20, Ownable {
 
         if(!swapping) {
 	    	uint256 gas = gasForProcessing;
-
 	    	try dividendTracker.process(gas) returns (uint256 iterations, uint256 claims, uint256 lastProcessedIndex) {
 	    		emit ProcessedDividendTracker(iterations, claims, lastProcessedIndex, true, gas, tx.origin);
 	    	}
